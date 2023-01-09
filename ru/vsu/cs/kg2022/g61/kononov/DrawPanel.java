@@ -22,6 +22,7 @@ public class DrawPanel extends JPanel {
     private final RealPoint[] points = new RealPoint[]{new RealPoint(0,0), new RealPoint(1,1), new RealPoint(2,2)};
 
     private int count = 0;
+    private JSpinner negr;
 
     private double SIZE = 15;
     private boolean isInit = true;
@@ -31,6 +32,10 @@ public class DrawPanel extends JPanel {
     public DrawPanel() {
 
 
+        negr = new JSpinner();
+        negr.setValue(12);
+
+        add(negr);
 
         converter = new ScreenConverter(800,600, -SIZE, SIZE, 2 * SIZE, 2 * SIZE);
         drawing = new GridDrawing(converter);
@@ -79,7 +84,7 @@ public class DrawPanel extends JPanel {
                     points[count%3] = (converter.s2r(new ScreenPoint(e.getX(), e.getY())));
 
                     if (count%3 == 2){
-                        Star star = new Star(points[0], (int) (Pifagor(points[0], points[1])), (int) (Pifagor(points[0], points[2])), 12 );
+                        Star star = new Star(points[0], (int) (Pifagor(points[0], points[1])), (int) (Pifagor(points[0], points[2])), (int) negr.getValue());
                         starList.add(star);
                     }
                     count +=1;
@@ -96,7 +101,7 @@ public class DrawPanel extends JPanel {
                 if(SwingUtilities.isLeftMouseButton(e)){
                     points[count%3] = (converter.s2r(new ScreenPoint(e.getX(), e.getY())));
                     if (count%3 == 2){
-                        Star star = new Star(points[0], (int) (Pifagor(points[0], points[1])), (int) (Pifagor(points[0], points[2])), 12 );
+                        Star star = new Star(points[0], (int) (Pifagor(points[0], points[1])), (int) (Pifagor(points[0], points[2])),  (int) negr.getValue());
                         starList.add(star);
                     }
                     count +=1;
@@ -211,11 +216,33 @@ public class DrawPanel extends JPanel {
 
         double da = 2 * Math.PI / n;
 
+
+
         for (int i = 0; i < n; i++){
             double a = da * i;
+            double a1 = da*i/2;
             drawer.drawLine(
                     (int) (center.getX() + r * Math.cos(a)),
                     (int) (center.getY() + r * Math.sin(a)),
+                    (int) (center.getX() + R * Math.cos(a)),
+                    (int) (center.getY() + R * Math.sin(a)));
+            if (i == 0){
+                drawer.drawLine(
+                        (int) (center.getX() + r * Math.cos(0)),
+                        (int) (center.getY() + r * Math.sin(a1)),
+                        (int) (center.getX() + R * Math.cos(0)),
+                        (int) (center.getY() + R * Math.sin(a)));
+            }
+            if (i == n-1){
+                drawer.drawLine(
+                        (int) (center.getX() + r * Math.cos(a1)),
+                        (int) (center.getY() + r * Math.sin(0)),
+                        (int) (center.getX() + R * Math.cos(a1)),
+                        (int) (center.getY() + R * Math.sin(0)));
+            }
+            drawer.drawLine(
+                    (int) (center.getX() + r * Math.cos(a1)),
+                    (int) (center.getY() + r * Math.sin(a1)),
                     (int) (center.getX() + R * Math.cos(a)),
                     (int) (center.getY() + R * Math.sin(a)));
         }
