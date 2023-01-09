@@ -34,7 +34,9 @@ public class DrawPanel extends JPanel {
 
         converter = new ScreenConverter(800,600, -SIZE, SIZE, 2 * SIZE, 2 * SIZE);
         drawing = new GridDrawing(converter);
-
+        Star s = new Star(new RealPoint(0,0), 2, 20, 12);
+        starList.add(s);
+        repaint();
         this.addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
@@ -75,11 +77,13 @@ public class DrawPanel extends JPanel {
                 if (SwingUtilities.isLeftMouseButton(e)) {
 
                     points[count%3] = (converter.s2r(new ScreenPoint(e.getX(), e.getY())));
+
                     if (count%3 == 2){
                         Star star = new Star(points[0], (int) (Pifagor(points[0], points[1])), (int) (Pifagor(points[0], points[2])), 12 );
                         starList.add(star);
                     }
                     count +=1;
+                    repaint();
                 }
 
             }
@@ -96,6 +100,7 @@ public class DrawPanel extends JPanel {
                         starList.add(star);
                     }
                     count +=1;
+                    repaint();
                 }
 
             }
@@ -152,11 +157,8 @@ public class DrawPanel extends JPanel {
 
 
         drawing.draw(ld,biG);
-
-        for (int i = 0; i < 2; i++) {
-            biG.drawOval((int) points[0].getX()-5, (int) points[0].getY()-5, 10, 10);
-            biG.drawOval((int) points[1].getX()-5, (int) points[1].getY()-5, 10, 10);
-        }
+        biG.drawOval((int) points[0].getX()-5, (int) points[0].getY()-5, 10, 10);
+        biG.drawOval((int) points[1].getX()-5, (int) points[1].getY()-5, 10, 10);
 
 
 //        System.out.println("Введите количество лучиков");
